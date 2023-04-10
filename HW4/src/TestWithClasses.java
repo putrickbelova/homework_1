@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class TestWithClasses {
@@ -25,6 +23,24 @@ public class TestWithClasses {
 
             public void print() {
                 System.out.println(questionNum + " вопрос: " + questionText);
+                System.out.println(" ");
+                for (TestAnswerVariant answer: answerVariant) {
+                    answer.print();
+                }
+                System.out.println(" ");
+                System.out.print("Ваш ответ: ");
+            }
+
+            public int isUserAnswerCorrect(int cock) {
+            int result = 0;
+                for (TestAnswerVariant answer: answerVariant) {
+                    if (answer.variantNum==cock) {
+                        if (answer.isAnswerCorrect) {
+                            result = 1;
+                        }
+                    }
+                }
+                return result;
             }
 
 
@@ -49,33 +65,6 @@ public class TestWithClasses {
         public void print() {
             System.out.println(variantNum + ") " + variantText);
         }
-
-        // Получение String  для Map из ответа пользователя
-        /*public String answerChoosing(int userAnswer) {
-            var counter = 1;
-            String userAnswerString = "error";
-            for (String k : dictionary.keySet()) {
-                if (counter != userAnswer) {
-                    counter++;
-                } else {userAnswerString = k;}
-            }
-
-            return userAnswerString;
-        }
-
-
-
-
-        //int правильный/неправильный(номерВариантаПолученныйОтПользователя)
-        public int isAnswerCorrect(String userAnswerString) {
-            int result = 0;
-            for (String k : dictionary.keySet()) {
-                if (k == userAnswerString) {
-                    if (dictionary.get(userAnswerString)) {result = 1;}
-                }
-            }
-            return result;
-        }*/
 
     }
 
@@ -114,31 +103,43 @@ public class TestWithClasses {
             Scanner scanner = new Scanner(System.in);
 
             // Переменные для хранения количества правильных и неправильных ответов
-            int correctCount = 0, wrongCount = 0;
+            int correctCount = 0, wrongCount = testQuestionsCount;
 
 
             for (TestQuestions questions:questionList) {
                 // Вывод вопросов и вариантов
                 questions.print();
+
+                int userAnswer;
+
+                while (true) {
+
+                    userAnswer = scanner.nextInt();
+                    boolean areYouHealthyUser = false;
+                    for (int i = 0; i < questions.answerVariant.length; i++)
+                        if (userAnswer == questions.answerVariant[i].variantNum) {
+                            areYouHealthyUser = true;
+                        }
+
+                    if (areYouHealthyUser) {
+                        break;
+                    }
+                    System.out.println("Вы ввели что-то странное");
+                    System.out.print("Ваш ответ: ");
+                }
+                int checkAnswer = questions.isUserAnswerCorrect(userAnswer);
+                if (checkAnswer == 1) {
+                    System.out.println("Ответ верен");
+                } else {
+                    System.out.println("Ответ неверен");
+                }
                 System.out.println(" ");
 
+                correctCount += questions.isUserAnswerCorrect(userAnswer);
 
-                /*answersList[questions.questionNum-1].print();
-                System.out.println(" ");
-                System.out.print("Ваш ответ: ");
-
-                // Считываем с консоли ответ пользователя
-                int userAnswer = scanner.nextInt();
-                userAnswer--;
-                String userAnswerString = answersList[questions.questionNum-1].answerChoosing(userAnswer);
-                System.out.println(answersList[questions.questionNum-1].answerChoosing(userAnswer));
-                System.out.println(userAnswer);
-                System.out.println(userAnswerString);
-                correctCount = correctCount + answersList[questions.questionNum-1].isAnswerCorrect(userAnswerString);
-                System.out.println(" ");*/
             }
 
-            wrongCount = testQuestionsCount - correctCount;
+            wrongCount -=  correctCount;
 
             //Выводим общий результат
             System.out.println("Результат: правильно " + correctCount + ", неправильно " + wrongCount);
