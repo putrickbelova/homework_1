@@ -5,7 +5,11 @@ public class sortCollection {
 
 
     private static int[] arraySort() {
-        int[] mas = {4, 0, 6, -17, 9, 3, 8, -1, -7, 1, -5, 7, -3};
+        int[] mas = new int[100000];
+        for (int i = 0; i < 100000; i++) {
+            mas[i] = (int) (Math.random()*(600+1)) - 200;
+            System.out.println(mas[i]);
+        }
         boolean isSorted = false;
         int buf;
         while (!isSorted) {
@@ -26,44 +30,38 @@ public class sortCollection {
 
     private static List<Integer> createList() {
         List<Integer> list = new ArrayList<>();
-        list.add(4);
-        list.add(0);
-        list.add(6);
-        list.add(-17);
-        list.add(9);
-        list.add(3);
-        list.add(8);
-        list.add(-1);
-        list.add(-7);
-        list.add(1);
-        list.add(-5);
-        list.add(7);
-        list.add(-3);
+        int i = 0;
+        int x;
+        while (i<100000) {
+            x = (int) (Math.random()*(600+1)) - 200;
+            list.add(x);
+            i++;
+        }
         return list;
     }
 
 
     public static void main(String[] args) {
-        int[] sortedArray = new int[15];
+        int[] sortedArray = new int[100000];
         long startTime1 = System.currentTimeMillis();
         sortedArray = arraySort();
         long endTime1 = System.currentTimeMillis();
-        for (int i = 0; i < sortedArray.length; i++) {
+        /*for (int i = 0; i < sortedArray.length; i++) {
             System.out.print(sortedArray[i]+" ");
-        }
+        }*/
         System.out.println(" ");
-        System.out.println("Time: " + (endTime1 - startTime1) + " milliseconds");
+        System.out.println("sortedArray. Time: " + (endTime1 - startTime1) + " milliseconds");
 
         List<Integer> list = createList();
         long startTime2 = System.currentTimeMillis();
         Collections.sort(list);
         long endTime2 = System.currentTimeMillis();
         Iterator<Integer> iterator = list.iterator();
-        while (iterator.hasNext()) {
+        /*while (iterator.hasNext()) {
             Integer item = iterator.next();
             System.out.print(item + " ");
-        }
+        }*/
         System.out.println(" ");
-        System.out.println("Time: " + (endTime2 - startTime2) + " milliseconds");
+        System.out.println("Collections.sort. Time: " + (endTime2 - startTime2) + " milliseconds");
     }
 }
